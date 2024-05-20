@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Game {
 
     // portable newline
@@ -12,35 +14,31 @@ public class Game {
     private Monster monster;     // the monster
     private Rogue rogue;         // the rogue
 
-    // initialize board from file
-    public Game(In in) {
+    public Game(String fileName) throws IOException {
+        char[][] board = Reader.readDungeon(fileName);
+        N = board.length;
+        initializeGame(board);
+    }
 
-        // read in data
-        N = Integer.parseInt(in.readLine());
-        char[][] board = new char[N][N];
+    private void initializeGame(char[][] board) {
+        dungeon = new Dungeon(board);
         for (int i = 0; i < N; i++) {
-            String s = in.readLine();
             for (int j = 0; j < N; j++) {
-                board[i][j] = s.charAt(2*j);
-
-                // check for monster's location
                 if (board[i][j] >= 'A' && board[i][j] <= 'Z') {
                     MONSTER = board[i][j];
                     board[i][j] = '.';
                     monsterSite = new Site(i, j);
                 }
-
-                // check for rogue's location
                 if (board[i][j] == ROGUE) {
                     board[i][j] = '.';
-                    rogueSite  = new Site(i, j);
+                    rogueSite = new Site(i, j);
                 }
             }
         }
-        dungeon = new Dungeon(board);
         monster = new Monster(this);
-        rogue   = new Rogue(this);
+        rogue = new Rogue(this);
     }
+
 
     // return position of monster and rogue
     public Site getMonsterSite() { return monsterSite; }
@@ -67,6 +65,13 @@ public class Game {
             if (dungeon.isLegalMove(rogueSite, next)) rogueSite = next;
             else throw new RuntimeException("Rogue caught cheating");
             System.out.println(this);
+
+            // make process visible
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         System.out.println("Caught by monster");
@@ -76,29 +81,34 @@ public class Game {
 
     // string representation of game state (inefficient because of Site and string concat)
     public String toString() {
-        String s = "";
+        //use stringBuilder instead of string
+        StringBuilder s = new StringBuilder();
+
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 Site site = new Site(i, j);
-                if (rogueSite.equals(monsterSite) && (rogueSite.equals(site))) s += "* ";
-                else if (rogueSite.equals(site))                               s += ROGUE   + " ";
-                else if (monsterSite.equals(site))                             s += MONSTER + " ";
-                else if (dungeon.isRoom(site))                                 s += ". ";
-                else if (dungeon.isCorridor(site))                             s += "+ ";
-                else if (dungeon.isRoom(site))                                 s += ". ";
-                else if (dungeon.isWall(site))                                 s += "  ";
+                if (rogueSite.equals(monsterSite) && (rogueSite.equals(site))) s.append("* ");
+                else if (rogueSite.equals(site)) s.append(ROGUE).append(" ");
+                else if (monsterSite.equals(site)) s.append(MONSTER).append(" ");
+                else if (dungeon.isRoom(site)) s.append(". ");
+                else if (dungeon.isCorridor(site)) s.append("+ ");
+                else if (dungeon.isRoom(site)) s.append(". ");
+                else if (dungeon.isWall(site)) s.append("  ");
             }
-            s += NEWLINE;
+            s.append(NEWLINE);
         }
-        return s;
+        return s.toString();
     }
 
 
     public static void main(String[] args) {
-        In stdin = new In("dungeons/dungeonC.txt");
-        Game game = new Game(stdin);
-        System.out.println(game);
-        game.play();
+        try {
+            Game game = new Game("dungeonA.txt");
+            System.out.println(game);
+            game.play();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
