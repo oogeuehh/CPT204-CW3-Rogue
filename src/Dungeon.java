@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+import java.lang.Character;
+
+>>>>>>> bf73991 (Initial commit)
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +19,7 @@ public class Dungeon {
     // initialize a new dungeon based on the given board
     public Dungeon(char[][] board) {
         N = board.length;
+<<<<<<< HEAD
         isRoom     = new boolean[N][N];
         isCorridor = new boolean[N][N];
         adjMap     = new HashMap<>();
@@ -25,6 +31,27 @@ public class Dungeon {
             }
         }
 
+=======
+        isRoom = new boolean[N][N];
+        isCorridor = new boolean[N][N];
+        adjMap = new HashMap<>();
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                char cell = board[i][j];
+                if (cell == '.') {
+                    isRoom[i][j] = true;
+                } else if (cell == '+') {
+                    isCorridor[i][j] = true;
+                } else if (Character.isUpperCase(cell) || cell == '@') { // Uppercase letters for monsters, '@' for rogue
+                    isRoom[i][j] = true; // or isCorridor[i][j] = true; based on your game rules
+                }
+                //System.out.println("Cell (" + i + ", " + j + "): " + cell + ", isRoom: " + isRoom[i][j] + ", isCorridor: " + isCorridor[i][j]);
+            }
+        }
+
+
+>>>>>>> bf73991 (Initial commit)
         // traverse each node of the dungeon
         // Check the point to the surrounding grid is valid or not
         for(int i = 0; i < N; i++) {
@@ -110,6 +137,7 @@ public class Dungeon {
     // return dimension of dungeon
     public int size() { return N; }
 
+<<<<<<< HEAD
     // does v correspond to a corridor site? 
     public boolean isCorridor(Site v) {
         int i = v.i();
@@ -127,6 +155,31 @@ public class Dungeon {
     // does v correspond to a wall site?
     public boolean isWall(Site v) {
         return (!isRoom(v) && !isCorridor(v));
+=======
+    // does v correspond to a corridor site?
+    public boolean isRoom(Site v) {
+        int i = v.i();
+        int j = v.j();
+        boolean result = i >= 0 && j >= 0 && i < N && j < N && isRoom[i][j];
+        //System.out.println("isRoom check for (" + i + ", " + j + "): " + result);
+        return result;
+    }
+
+    public boolean isCorridor(Site v) {
+        int i = v.i();
+        int j = v.j();
+        boolean result = i >= 0 && j >= 0 && i < N && j < N && isCorridor[i][j];
+        //System.out.println("isCorridor check for (" + i + ", " + j + "): " + result);
+        return result;
+    }
+
+
+    // does v correspond to a wall site?
+    public boolean isWall(Site v) {
+        boolean result = (!isRoom(v) && !isCorridor(v));
+        //System.out.println("isWall check for " + v + ": " + result);
+        return result;
+>>>>>>> bf73991 (Initial commit)
     }
 
     // does v-w correspond to a legal move?
@@ -135,6 +188,7 @@ public class Dungeon {
         int j1 = v.j();
         int i2 = w.i();
         int j2 = w.j();
+<<<<<<< HEAD
         if (i1 < 0 || j1 < 0 || i1 >= N || j1 >= N) return false;
         if (i2 < 0 || j2 < 0 || i2 >= N || j2 >= N) return false;
         if (isWall(v) || isWall(w)) return false;
@@ -147,4 +201,51 @@ public class Dungeon {
         return false;
     }
 
+=======
+
+       /* System.out.println("Checking move from " + v + " to " + w);
+        System.out.println("i1: " + i1 + ", j1: " + j1);
+        System.out.println("i2: " + i2 + ", j2: " + j2);
+        System.out.println("N: " + N);*/
+
+        if (i1 < 0 || j1 < 0 || i1 >= N || j1 >= N) {
+            //System.out.println("Position out of bounds for v: " + v);
+            return false;
+        }
+        if (i2 < 0 || j2 < 0 || i2 >= N || j2 >= N) {
+            //System.out.println("Position out of bounds for w: " + w);
+            return false;
+        }
+        if (isWall(v) || isWall(w)) {
+            //System.out.println("Wall check failed for v: " + v + " or w: " + w);
+            return false;
+        }
+        if (Math.abs(i1 - i2) > 1) {
+            //System.out.println("Move distance check failed for rows v: " + v + " and w: " + w);
+            return false;
+        }
+        if (Math.abs(j1 - j2) > 1) {
+            //System.out.println("Move distance check failed for columns v: " + v + " and w: " + w);
+            return false;
+        }
+        if (isRoom(v) && isRoom(w)) {
+            //System.out.println("Legal move from room to room for v: " + v + " and w: " + w);
+            return true;
+        }
+        if (i1 == i2) {
+            //System.out.println("Legal move in the same row for v: " + v + " and w: " + w);
+            return true;
+        }
+        if (j1 == j2) {
+            //System.out.println("Legal move in the same column for v: " + v + " and w: " + w);
+            return true;
+        }
+
+        //System.out.println("Move not allowed for v: " + v + " and w: " + w);
+        return false;
+    }
+
+
+
+>>>>>>> bf73991 (Initial commit)
 }
