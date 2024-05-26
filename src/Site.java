@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Site {
     private int i; //row
     private int j; //column
@@ -22,17 +24,22 @@ public class Site {
     }
 
     // does invoking site equal site w?
-    public boolean equals(Site w) {
-<<<<<<< HEAD
-        return (manhattanTo(w) == 0);
-=======
-        Site obj = (Site)w;
-        return (manhattanTo(obj) == 0);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Site site = (Site) o;
+        return i == site.i && j == site.j;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(i, j);
+    }
+
     @Override
     public String toString() {
         return "(" + i + ", " + j + ")";
->>>>>>> bf73991 (Initial commit)
     }
 
 }

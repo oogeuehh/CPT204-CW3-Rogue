@@ -1,14 +1,6 @@
-import java.util.ArrayList;
-<<<<<<< HEAD
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
-=======
-import java.util.List;
-import java.util.Random;
->>>>>>> bf73991 (Initial commit)
-public class Rogue extends Character{
+public class Rogue extends Character {
 
     public Rogue(Game game) {
         super(game);
@@ -16,66 +8,61 @@ public class Rogue extends Character{
 
     @Override
     public Site move() {
-<<<<<<< HEAD
-//        Site monster = game.getMonsterSite();
-        Site rogue   = game.getRogueSite();
-=======
         Site rogue = game.getRogueSite();
->>>>>>> bf73991 (Initial commit)
         Site monster = game.getMonsterSite();
-        Site bestMove = rogue;
+
+        List<Site> neighbors = getNeighbors(rogue);
+        Site bestMove = null;
         int maxDist = -1;
-        int minLoopDist = Integer.MAX_VALUE;
 
-<<<<<<< HEAD
-        for (Site neighbor : getNeighbors(rogue)) {
-            int distToMonster = getDistToSite(neighbor, monster);
-            int distToLoop = getDistToNearestLoop(neighbor); // Placeholder
-=======
-        List<Site> longestPathNeighbors = new ArrayList<>();
-
-        for (Site neighbor : getNeighbors(rogue)) {
-            int distToMonster = getDistToSite(neighbor, monster);
-            int distToLoop = getDistToNearestLoop(neighbor);
-            //System.out.println("Neighbor: " + neighbor + ", Distance to monster: " + distToMonster);
->>>>>>> bf73991 (Initial commit)
-
-            if (distToMonster > maxDist || (distToMonster == maxDist && distToLoop < minLoopDist)) {
+        for (Site neighbor : neighbors) {
+            int distToMonster = dfs(neighbor, monster, new HashSet<>());
+            if (distToMonster > maxDist) {
                 maxDist = distToMonster;
-                minLoopDist = distToLoop;
-<<<<<<< HEAD
                 bestMove = neighbor;
             }
         }
 
-=======
-                longestPathNeighbors.clear();
-                longestPathNeighbors.add(neighbor);
-            } else if (distToMonster == maxDist && distToLoop == minLoopDist) {
-                longestPathNeighbors.add(neighbor);
+        return (bestMove != null) ? bestMove : rogue; // 如果找不到最佳移动位置，则保持原地
+    }
+
+    // DFS方法，计算到目标点的最远距离
+    private int dfs(Site start, Site target, Set<Site> visited) {
+        if (start.equals(target)) {
+            return 0; // 如果当前位置是目标点，则距离为0
+        }
+
+        visited.add(start);
+        int maxDist = -1;
+
+        List<Site> neighbors = getNeighbors(start);
+        for (Site neighbor : neighbors) {
+            if (!visited.contains(neighbor)) {
+                int distToTarget = dfs(neighbor, target, visited);
+                maxDist = Math.max(maxDist, distToTarget + 1);
             }
         }
-/*// Print the longest path neighbors
-        System.out.println("Longest path neighbors:");
-        for (Site neighbor : longestPathNeighbors) {
-            System.out.println(neighbor);
-        }*/
 
-        // Randomly choose one neighbor from the longest path neighbors
-        if (!longestPathNeighbors.isEmpty()) {
-            Random random = new Random();
-            int randomIndex = random.nextInt(longestPathNeighbors.size());
-            bestMove = longestPathNeighbors.get(randomIndex);
+        visited.remove(start);
+        return maxDist;
+    }
+
+    @Override
+    protected List<Site> getNeighbors(Site site) {
+        List<Site> neighbors = new ArrayList<>();
+        int[] directions = {-1, 0, 1};
+
+        for (int i : directions) {
+            for (int j : directions) {
+                if (i != 0 || j != 0) {
+                    Site neighbor = new Site(site.i() + i, site.j() + j);
+                    if (dungeon.isLegalMove(site, neighbor)) {
+                        neighbors.add(neighbor);
+                    }
+                }
+            }
         }
 
-        //System.out.println("Best move chosen: " + (bestMove != null ? bestMove : monster));
->>>>>>> bf73991 (Initial commit)
-        return bestMove;
+        return neighbors;
     }
-
-    private int getDistToNearestLoop(Site site) {
-        // Placeholder for actual loop distance calculation
-        return 0; // Assume 0 distance to loop as a placeholder
-    }
-
 }
