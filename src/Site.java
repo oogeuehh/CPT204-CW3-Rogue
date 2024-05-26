@@ -23,16 +23,12 @@ public class Site {
 
     // does invoking site equal site w?
     public boolean equals(Site w) {
-<<<<<<< HEAD
-        return (manhattanTo(w) == 0);
-=======
         Site obj = (Site)w;
         return (manhattanTo(obj) == 0);
     }
     @Override
     public String toString() {
         return "(" + i + ", " + j + ")";
->>>>>>> bf73991 (Initial commit)
     }
 
 }
