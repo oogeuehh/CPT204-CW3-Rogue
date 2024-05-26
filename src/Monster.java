@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-=======
 import java.util.*;
->>>>>>> bf73991 (Initial commit)
 
 public class Monster extends  Character{
 
@@ -18,24 +11,6 @@ public class Monster extends  Character{
     @Override
     public Site move() {
         Site monster = game.getMonsterSite();
-<<<<<<< HEAD
-        Site rogue   = game.getRogueSite();
-        Site bestMove = monster;
-        int minDist = Integer.MAX_VALUE;
-
-        for (Site neighbor : getNeighbors(monster)) {
-            int distToRogue = getDistToSite(neighbor, rogue);
-
-            if (distToRogue < minDist) {
-                minDist = distToRogue;
-                bestMove = neighbor;
-            }
-        }
-
-        return bestMove != null ? bestMove : monster;
-    }
-
-=======
         Site rogue = game.getRogueSite();
         List<Site> shortestNeighbors = new ArrayList<>();
         int minDist = Integer.MAX_VALUE;
@@ -72,5 +47,4 @@ public class Monster extends  Character{
     }
 
 
->>>>>>> bf73991 (Initial commit)
 }
