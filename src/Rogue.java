@@ -12,39 +12,56 @@ public class Rogue extends Character {
         Site monster = game.getMonsterSite();
 
         List<Site> neighbors = getNeighbors(rogue);
-        Site bestMove = null;
+        List<Site> farthestNeighbors = new ArrayList<>();
         int maxDist = -1;
 
         for (Site neighbor : neighbors) {
-            int distToMonster = dfs(neighbor, monster, new HashSet<>());
+            int distToMonster =  bfs(neighbor, monster);
             if (distToMonster > maxDist) {
                 maxDist = distToMonster;
-                bestMove = neighbor;
+                farthestNeighbors.clear();
+                farthestNeighbors.add(neighbor);
+            } else if (distToMonster == maxDist) {
+                farthestNeighbors.add(neighbor);
             }
         }
 
-        return (bestMove != null) ? bestMove : rogue; // 如果找不到最佳移动位置，则保持原地
+        if (farthestNeighbors.isEmpty()) {
+            return rogue;
+        }
+
+        Random random = new Random();
+        Site bestMove = farthestNeighbors.get(random.nextInt(farthestNeighbors.size()));
+
+        return bestMove;
     }
 
-    // DFS方法，计算到目标点的最远距离
-    private int dfs(Site start, Site target, Set<Site> visited) {
-        if (start.equals(target)) {
-            return 0; // 如果当前位置是目标点，则距离为0
-        }
-
+    // BFS method to find the shortest path distance
+    private int bfs(Site start, Site target) {
+        Queue<Site> queue = new LinkedList<>();
+        Set<Site> visited = new HashSet<>();
+        queue.add(start);
         visited.add(start);
-        int maxDist = -1;
+        int distance = 0;
 
-        List<Site> neighbors = getNeighbors(start);
-        for (Site neighbor : neighbors) {
-            if (!visited.contains(neighbor)) {
-                int distToTarget = dfs(neighbor, target, visited);
-                maxDist = Math.max(maxDist, distToTarget + 1);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Site current = queue.poll();
+                if (current.equals(target)) {
+                    return distance;
+                }
+                for (Site neighbor : getNeighbors(current)) {
+                    if (!visited.contains(neighbor)) {
+                        queue.add(neighbor);
+                        visited.add(neighbor);
+                    }
+                }
             }
+            distance++;
         }
 
-        visited.remove(start);
-        return maxDist;
+        return Integer.MAX_VALUE; // If the target is not reachable
     }
 
     @Override
@@ -66,3 +83,4 @@ public class Rogue extends Character {
         return neighbors;
     }
 }
+
