@@ -13,6 +13,7 @@ public class Game {
     private Site rogueSite;      // location of rogue
     private Monster monster;     // the monster
     private Rogue rogue;         // the rogue
+    private boolean isGameOver = false; // status of game
 
     public Game(String fileName) throws IOException {
         char[][] board = Reader.readDungeon(fileName);
@@ -39,6 +40,37 @@ public class Game {
         rogue = new Rogue(this);
     }
 
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void step() {
+        if (isGameOver) return;
+
+        if (monsterSite.equals(rogueSite)) {
+            isGameOver = true;
+            return;
+        }
+
+        // Monster moves
+        Site next = monster.move();
+        if (dungeon.isLegalMove(monsterSite, next)) monsterSite = next;
+        else throw new RuntimeException("Monster caught cheating");
+
+        if (monsterSite.equals(rogueSite)) {
+            isGameOver = true;
+            return;
+        }
+
+        // Rogue moves
+        next = rogue.move();
+        if (dungeon.isLegalMove(rogueSite, next)) rogueSite = next;
+        else throw new RuntimeException("Rogue caught cheating");
+
+        if (monsterSite.equals(rogueSite)) {
+            isGameOver = true;
+        }
+    }
 
     // return position of monster and rogue
     public Site getMonsterSite() { return monsterSite; }
@@ -51,7 +83,7 @@ public class Game {
         for (int t = 1; true; t++) {
             System.out.println("Move " + t);
             System.out.println();
-            
+
             // monster moves
             if (monsterSite.equals(rogueSite)) break;
             Site next = monster.move();
@@ -103,7 +135,7 @@ public class Game {
 
     public static void main(String[] args) {
         try {
-            Game game = new Game("dungeonA.txt");
+            Game game = new Game("dungeonR.txt");
             System.out.println(game);
             game.play();
         } catch (IOException e) {
