@@ -3,7 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Reader {
-    private static final String DUNGEON_PATH = "src/Dungeons/";
+    private static final String DUNGEON_PATH = "Dungeons/";
 
     public static char[][] readDungeon(String fileName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(DUNGEON_PATH + fileName));
