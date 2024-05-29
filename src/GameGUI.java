@@ -35,7 +35,7 @@ public class GameGUI {
 
     private void startGame() {
         try {
-            game = new Game("dungeonR.txt");
+            game = new Game("dungeonO.txt");
             gameArea.setText(game.toString());
             timer = new Timer(500, new ActionListener() {
                 @Override

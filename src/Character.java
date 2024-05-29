@@ -39,15 +39,4 @@ public abstract class Character {
     }
 
 
-
-    protected int getDistToSite(Site from, Site to) {
-        int start = from.i() * N + from.j();
-        int end = to.i() * N + to.j();
-        //System.out.println("Calculating distance from " + from + " (ID: " + start + ") to " + to + " (ID: " + end + ")");
-        int distance = dungeon.dijkstra(start, end);
-        // System.out.println("Distance calculated: " + distance);
-        return distance;
-    }
-
-
 }

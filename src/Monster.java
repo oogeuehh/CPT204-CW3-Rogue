@@ -1,13 +1,20 @@
 import java.util.*;
 
 public class Monster extends  Character{
+    private Map<Site, Map<Site, Integer>> distanceCache;// storage path cache
 
     public Monster(Game game) {
 
         super(game);
+        distanceCache = new HashMap<>();
 
     }
 
+    /**
+     * Monster's move strategy: Find the shortest path to the rogue using cached distances.
+     *
+     * @return the next site for the monster to move to
+     */
     @Override
     public Site move() {
         Site monster = game.getMonsterSite();
@@ -15,13 +22,9 @@ public class Monster extends  Character{
         List<Site> shortestNeighbors = new ArrayList<>();
         int minDist = Integer.MAX_VALUE;
 
-        //System.out.println("Monster current site: " + monster);
-        //System.out.println("Rogue current site: " + rogue);
-
         // Find shortest distance to rogue and collect all neighbors with the same shortest distance
         for (Site neighbor : getNeighbors(monster)) {
-            int distToRogue = getDistToSite(neighbor, rogue);
-            //System.out.println("Neighbor: " + neighbor + ", Distance to Rogue: " + distToRogue);
+            int distToRogue = getDistToSiteCached(neighbor, rogue);
 
             if (distToRogue < minDist) {
                 minDist = distToRogue;
@@ -32,18 +35,30 @@ public class Monster extends  Character{
             }
         }
 
-       /* // Print the shortest path neighbors
-        System.out.println("Longest path neighbors:");
-        for (Site neighbor : shortestNeighbors) {
-            System.out.println(neighbor);
-        }
-*/
         // Randomly choose one neighbor from the shortestNeighbors list
         Random random = new Random();
         Site bestMove = shortestNeighbors.get(random.nextInt(shortestNeighbors.size()));
 
-        //System.out.println("Best move chosen: " + (bestMove != null ? bestMove : monster));
         return bestMove != null ? bestMove : monster;
+    }
+
+    /**
+     * Get the cached distance between two sites, computing it if necessary.
+     *
+     * @param from the starting site
+     * @param to the destination site
+     * @return the distance between the two sites
+     */
+    private int getDistToSiteCached(Site from, Site to) {
+        distanceCache.putIfAbsent(from, new HashMap<>());
+        Map<Site, Integer> fromCache = distanceCache.get(from);
+
+        if(!fromCache.containsKey(to)) {
+            int distance = dungeon.dijkstra(from.i()*N + from.j(), to.i()*N + to.j());
+            fromCache.put(to, distance);
+        }
+
+        return fromCache.get(to);
     }
 
 

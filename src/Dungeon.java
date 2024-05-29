@@ -84,7 +84,8 @@ public class Dungeon {
             // calculate minimum dist of waitingMap
             int minNodeID = -1;
             int minDist = Integer.MAX_VALUE;
-            for(Map.Entry<Integer, Integer> entry:waitingMap.entrySet()){
+
+            for(Map.Entry<Integer, Integer> entry : waitingMap.entrySet()){
                 int thisNodeID = entry.getKey();
                 int thisDist = entry.getValue();
 
