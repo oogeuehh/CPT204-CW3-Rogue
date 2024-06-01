@@ -4,7 +4,7 @@ public class Game {
 
     // portable newline
     private final static String NEWLINE = System.getProperty("line.separator");
-  
+
     private Dungeon dungeon;     // the dungeon
     private char MONSTER;        // name of the monster (A - Z)
     private char ROGUE = '@';    // name of the rogue
@@ -98,12 +98,12 @@ public class Game {
             else throw new RuntimeException("Rogue caught cheating");
             System.out.println(this);
 
-//            // make process visible
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
+            // make process visible
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         System.out.println("Caught by monster");
