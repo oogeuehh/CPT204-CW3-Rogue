@@ -135,7 +135,7 @@ public class Game {
 
     public static void main(String[] args) {
         try {
-            Game game = new Game("dungeonR.txt");
+            Game game = new Game("dungeonA.txt");
             System.out.println(game);
             game.play();
         } catch (IOException e) {

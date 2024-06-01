@@ -29,7 +29,6 @@ public class Dungeon {
                 } else if (Character.isUpperCase(cell) || cell == '@') { // Uppercase letters for monsters, '@' for rogue
                     isRoom[i][j] = true; // or isCorridor[i][j] = true; based on your game rules
                 }
-                //System.out.println("Cell (" + i + ", " + j + "): " + cell + ", isRoom: " + isRoom[i][j] + ", isCorridor: " + isCorridor[i][j]);
             }
         }
 
@@ -70,7 +69,7 @@ public class Dungeon {
     }
 
     // dijkstra algorithm
-    // 用nodeID不用site是因为site还要转化成nodeID
+    // use nodeID instead of site to avoid superfluous transfer
     public int dijkstra(int startNodeID, int endNodeID){
         // create two map to store set of nodes, nodeID, shortest dist
         HashMap<Integer, Integer> distMap = new HashMap<>();
@@ -193,7 +192,5 @@ public class Dungeon {
         //System.out.println("Move not allowed for v: " + v + " and w: " + w);
         return false;
     }
-
-
 
 }

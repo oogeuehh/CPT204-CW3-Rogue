@@ -18,25 +18,20 @@ public abstract class Character {
         List<Site> neighbors = new ArrayList<>();
         int[] directions = {-1, 0, 1};
 
-        //System.out.println("Current site: " + site);
-
         for (int i : directions) {
             for (int j : directions) {
                 if (i != 0 || j != 0) {
                     Site neighbor = new Site(site.i() + i, site.j() + j);
-                    //System.out.println("Checking neighbor: " + neighbor);
+
                     boolean legalMove = dungeon.isLegalMove(site, neighbor);
-                    //System.out.println("Neighbor: " + neighbor + " is " + (legalMove ? "legal" : "not legal"));
+
                     if (legalMove) {
                         neighbors.add(neighbor);
                     }
                 }
             }
         }
-
-        //System.out.println("Neighbors found: " + neighbors);
         return neighbors;
     }
-
 
 }
